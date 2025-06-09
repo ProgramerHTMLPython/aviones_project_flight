@@ -1,2 +1,2 @@
 # aviones_project_flight
-Si te gusta Project Flight de Roblox, pero no sabes que avion elegir y que aeropuertos. ESTO TE AYUDA.
+En este codigo esta los pases: Airbus A330, Airbus A350, Boeing 777, Boeing 787 y Cessna Citation II.
