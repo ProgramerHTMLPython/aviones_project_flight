@@ -1,0 +1,126 @@
+import tkinter as tk
+import random
+
+# Lista completa de aviones
+aviones_lista = [
+    'Piper M350', 'Baron G58', 'Metroliner III', 'TBM 900', 
+    'Cessna 150A', 'Cessna Citation II', 'Boeing 717',
+    'MD-11', 'Fokker 100', 'Dash 8-Q400', 'Eurofighter Typhoon', 
+    'Hawk T1A', 'Boeing 787', 'Boeing 777', 'Boeing 757', 
+    'Boeing 737', 'Boeing 727', 'Airbus A350', 'Airbus A330', 
+    'Airbus A220', 'Airbus A320'
+]
+
+# Aeropuertos iniciales válidos
+aeropuertos_iniciales_grandes = [
+    'Southampton', 'Menorca', 'Gran Canaria', 'Gatwick', 'Punta Cana', 'Cibao', 'Larnaca'
+]
+
+aeropuertos_iniciales_pequenos = [
+    'Arroyo Barril', 'Cabo Rojo', 'Antoine-Simon'
+]
+
+# Diccionario de aeropuertos iniciales con sus vecinos
+aeropuertos_cercanos = {
+    'Southampton': ['Gatwick', 'Kittilä', 'Menorca', 'Gran Canaria'],
+    'Menorca': ['Southampton', 'Gatwick', 'Gran Canaria', 'Punta Cana'],
+    'Gatwick': ['Southampton', 'Menorca', 'Gran Canaria', 'Larnaca'],
+    'Gran Canaria': ['Menorca', 'Southampton', 'Cibao', 'Gatwick'],
+    'Arroyo Barril': ['Cabo Rojo', 'Cibao', 'Punta Cana'],
+    'Cabo Rojo': ['Arroyo Barril', 'Antoine-Simon', 'Cibao'],
+    'Antoine-Simon': ['Cabo Rojo', 'Gran Canaria', 'Punta Cana'],
+    'Cibao': ['Punta Cana', 'Gran Canaria', 'Arroyo Barril'],
+    'Punta Cana': ['Cibao', 'Gran Canaria', 'Antoine-Simon'],
+    'Larnaca': ['Gatwick', 'Southampton', 'Menorca'],
+}
+
+# Categorías de aviones según aeropuertos aceptados
+aviones_grandes = [
+    'Boeing 777', 'Boeing 787', 'Airbus A350'
+]
+
+aviones_pequenos = [
+    'Piper M350', 'Baron G58', 'Metroliner III', 
+    'TBM 900', 'Cessna 150A', 'Cessna Citation II'
+]
+
+aviones_exclusivos = [
+    'Boeing 757', 'Boeing 737', 'Boeing 727', 'MD-11', 
+    'Fokker 100', 'Dash 8-Q400', 'Airbus A220', 'Airbus A330', 
+    'Hawk T1A', 'Eurofighter Typhoon'
+]
+
+# Color de fondo personalizado
+COLOR_FONDO = "#7D8F97"
+COLOR_TEXTO = '#ABC9DA'
+COLOR_BOTON = "#1E4963"  # Cambia este valor por el color que prefieras
+
+# Función para elegir avión y aeropuertos
+
+def elegir_avion_y_aeropuertos():
+    if aviones_lista:
+        avion_elegido = random.choice(aviones_lista)
+        avion_label.config(text=f"Avión: {avion_elegido}")
+
+        # Avionetas: solo pequeños y sus vecinos
+        if avion_elegido in aviones_pequenos:
+            aeropuerto_inicial = random.choice(aeropuertos_iniciales_pequenos)
+            vecinos = aeropuertos_cercanos.get(aeropuerto_inicial, [])
+            aeropuerto_cercano = random.choice(vecinos) if vecinos else "Sin vecino"
+
+        # Aviones grandes: solo grandes (sin Southampton y sin Menorca), no usan vecinos
+        elif avion_elegido in ['Boeing 777', 'Boeing 787', 'Airbus A350', 'Airbus A330']:
+            # Excluimos Southampton y Menorca
+            aeropuertos_grandes_restringidos = [a for a in aeropuertos_iniciales_grandes if a not in ('Southampton', 'Menorca')]
+            aeropuerto_inicial = random.choice(aeropuertos_grandes_restringidos)
+            # El aeropuerto cercano también se elige de los grandes restringidos, distinto al inicial
+            posibles_cercanos = [a for a in aeropuertos_grandes_restringidos if a != aeropuerto_inicial]
+            aeropuerto_cercano = random.choice(posibles_cercanos) if posibles_cercanos else aeropuerto_inicial
+
+        # Aviones exclusivos: solo grandes, no usan vecinos, ahora excluidos Menorca y Southampton también
+        elif avion_elegido in aviones_exclusivos:
+            aeropuertos_grandes_restringidos = [a for a in aeropuertos_iniciales_grandes if a not in ('Southampton', 'Menorca')]
+            aeropuerto_inicial = random.choice(aeropuertos_grandes_restringidos)
+            posibles_cercanos = [a for a in aeropuertos_grandes_restringidos if a != aeropuerto_inicial]
+            aeropuerto_cercano = random.choice(posibles_cercanos) if posibles_cercanos else aeropuerto_inicial
+
+        # Otros (fallback)
+        else:
+            aeropuerto_inicial = random.choice(aeropuertos_iniciales_grandes)
+            aeropuerto_cercano = random.choice(aeropuertos_iniciales_grandes)
+
+        aeropuerto_inicial_label.config(text=f"Aeropuerto inicial: {aeropuerto_inicial}")
+        aeropuerto_cercano_label.config(text=f"Aeropuerto final: {aeropuerto_cercano}")
+
+    else:
+        avion_label.config(text="Avión: No definido")
+        aeropuerto_inicial_label.config(text="Aeropuerto inicial: No definido")
+        aeropuerto_cercano_label.config(text="Aeropuerto cercano: No definido")
+
+
+
+
+# Crear ventana de la interfaz gráfica
+root = tk.Tk()
+root.title("Selector Aleatorio de Aviones y Aeropuertos")
+root.geometry("500x247")
+root.configure(bg=COLOR_FONDO)
+
+# Etiqueta para mostrar el avión elegido
+avion_label = tk.Label(root, text="Avión: ?", font=("KG Red Hands", 15), bg=COLOR_TEXTO)
+avion_label.pack(pady=10)
+
+# Etiqueta para mostrar el aeropuerto inicial
+aeropuerto_inicial_label = tk.Label(root, text="Aeropuerto inicial: ?", font=("KG Red Hands", 15), bg=COLOR_TEXTO)
+aeropuerto_inicial_label.pack(pady=10)
+
+# Etiqueta para mostrar el aeropuerto cercano
+aeropuerto_cercano_label = tk.Label(root, text="Aeropuerto cercano(secundario): ?", font=("KG Red Hands", 15), bg=COLOR_TEXTO)
+aeropuerto_cercano_label.pack(pady=10)
+
+# Botón para elegir avión y aeropuertos
+boton = tk.Button(root, text="Elegir Aleatorios", command=elegir_avion_y_aeropuertos, bg=COLOR_BOTON)
+boton.pack(pady=10)
+
+# Iniciar la ventana principal
+root.mainloop()
