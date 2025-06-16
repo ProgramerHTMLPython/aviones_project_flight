@@ -49,7 +49,7 @@
     ];
 
     const aeropuertos_iniciales_grandes = [
-      'Southampton', 'Menorca', 'Gran Canaria', 'Gatwick', 'Punta Cana', 'Cibao', 'Larnaca', 'RAF Akrotiri', 'Paphos'
+      'Southampton', 'Menorca', 'Gran Canaria', 'Gatwick', 'Punta Cana', 'Cibao', 'Larnaca', 'RAF Akrotiri'
     ];
 
     const aeropuertos_iniciales_pequenos = [
@@ -70,45 +70,21 @@
       'Paphos': ['Larnaca', 'RAF Akrotiri']
     };
 
+    const aviones_grandes = ['Boeing 777', 'Boeing 787', 'Airbus A350'];
     const aviones_pequenos = ['Piper M350', 'Baron G58', 'Metroliner III', 'TBM 900', 'Cessna 150A', 'Cessna Citation II'];
     const aviones_exclusivos = ['Boeing 757', 'Boeing 737', 'Boeing 727', 'MD-11', 'Fokker 100', 'Dash 8-Q400', 'Airbus A220', 'Airbus A330', 'Hawk T1A', 'Eurofighter Typhoon'];
-    const aviones_grandes2 = ['Boeing 777', 'Boeing 787', 'Airbus A350', 'Airbus A330', 'MD-11'];
+    const aviones_grandes2 = ['Boeing 777', 'Boeing 787', 'Airbus A350', 'Airbus A330'];
 
     function randomChoice(array) {
       return array[Math.floor(Math.random() * array.length)];
     }
 
     function elegirAvionYAeropuertos() {
-      let avion;
-      let aeropuerto_inicial;
+      if (!aviones_lista.length) return;
 
+      let avion, aeropuerto_inicial, aeropuerto_cercano;
+
+      // Elegir avión primero
       do {
         avion = randomChoice(aviones_lista);
-        aeropuerto_inicial = randomChoice(aeropuertos_iniciales_grandes);
-      } while (
-        aeropuerto_inicial === 'Paphos' &&
-        ![...aviones_pequenos, ...aviones_exclusivos].includes(avion)
-      );
-
-      document.getElementById("avion_label").textContent = `Avión: ${avion}`;
-      document.getElementById("aeropuerto_inicial_label").textContent = `Aeropuerto inicial: ${aeropuerto_inicial}`;
-
-      let aeropuerto_cercano;
-
-      if (aviones_pequenos.includes(avion)) {
-        const vecinos = aeropuertos_cercanos[aeropuerto_inicial] || [];
-        aeropuerto_cercano = vecinos.length ? randomChoice(vecinos) : "Sin vecino";
-      } else {
-        let posibles = [...aeropuertos_iniciales_grandes];
-        if (aeropuerto_inicial === 'Paphos') {
-          posibles = posibles.filter(a => a !== 'Paphos');
-        }
-        posibles = posibles.filter(a => a !== aeropuerto_inicial);
-        aeropuerto_cercano = posibles.length ? randomChoice(posibles) : aeropuerto_inicial;
-      }
-
-      document.getElementById("aeropuerto_cercano_label").textContent = `Aeropuerto cercano: ${aeropuerto_cercano}`;
-    }
-  </script>
-</body>
-</html>
+      } while (aviones_grandes2
