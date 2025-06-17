@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Selector Aleatorio de Aviones y Aeropuertos</title>
   <style>
     body {
@@ -33,9 +33,11 @@
 <body>
 
   <h2>Selector Aleatorio de Aviones y Aeropuertos</h2>
+
   <div id="avion_label" class="label">Avión: ?</div>
   <div id="aeropuerto_inicial_label" class="label">Aeropuerto inicial: ?</div>
   <div id="aeropuerto_cercano_label" class="label">Aeropuerto cercano (secundario): ?</div>
+
   <button onclick="elegirAvionYAeropuertos()">Elegir Aleatorios</button>
 
   <script>
@@ -49,7 +51,8 @@
     ];
 
     const aeropuertos_iniciales_grandes = [
-      'Southampton', 'Menorca', 'Gran Canaria', 'Gatwick', 'Punta Cana', 'Cibao', 'Larnaca', 'RAF Akrotiri'
+      'Southampton', 'Menorca', 'Gran Canaria', 'Gatwick', 'Punta Cana',
+      'Cibao', 'Larnaca', 'RAF Akrotiri', 'Paphos'
     ];
 
     const aeropuertos_iniciales_pequenos = [
@@ -62,6 +65,7 @@
       'Gatwick': ['Southampton', 'Menorca', 'Gran Canaria', 'Larnaca'],
       'Gran Canaria': ['Menorca', 'Southampton', 'Cibao', 'Gatwick'],
       'Arroyo Barril': ['Cabo Rojo', 'Cibao', 'Punta Cana'],
+      'Cabo Rojo': ['Arroyo Barril', 'Antoine-Simon', 'Punta Cana', 'Cibao'],
       'Antoine-Simon': ['Cabo Rojo', 'Gran Canaria', 'Punta Cana'],
       'Cibao': ['Punta Cana', 'Gran Canaria', 'Arroyo Barril'],
       'Punta Cana': ['Cibao', 'Gran Canaria', 'Antoine-Simon'],
@@ -79,12 +83,56 @@
       return array[Math.floor(Math.random() * array.length)];
     }
 
-    function elegirAvionYAeropuertos() {
-      if (!aviones_lista.length) return;
+function elegirAvionYAeropuertos() {
+  if (!aviones_lista.length) return;
 
-      let avion, aeropuerto_inicial, aeropuerto_cercano;
+  const avion = randomChoice(aviones_lista);
+  document.getElementById("avion_label").textContent = `Avión: ${avion}`;
 
-      // Elegir avión primero
-      do {
-        avion = randomChoice(aviones_lista);
-      } while (aviones_grandes2
+  let aeropuerto_inicial, aeropuerto_cercano;
+
+  if (aviones_pequenos.includes(avion)) {
+    aeropuerto_inicial = randomChoice(aeropuertos_iniciales_pequenos);
+    const vecinos = aeropuertos_cercanos[aeropuerto_inicial] || [];
+    // Filtrar para que no sea igual al inicial
+    const opciones_cercanas = vecinos.filter(a => a !== aeropuerto_inicial);
+    aeropuerto_cercano = opciones_cercanas.length
+      ? randomChoice(opciones_cercanas)
+      : "Sin aeropuerto cercano";
+
+  } else if (aviones_grandes.includes(avion) || aviones_exclusivos.includes(avion)) {
+    let disponibles = aeropuertos_iniciales_grandes;
+
+    if (aviones_grandes2.includes(avion)) {
+      disponibles = disponibles.filter(a => a !== 'Paphos');
+    }
+
+    aeropuerto_inicial = randomChoice(disponibles);
+
+    let posibles_cercanos = (aeropuertos_cercanos[aeropuerto_inicial] || [])
+      .filter(a => {
+        if (aviones_grandes2.includes(avion)) {
+          return a !== 'Paphos';
+        }
+        return true;
+      })
+      .filter(a => a !== aeropuerto_inicial);
+
+    aeropuerto_cercano = posibles_cercanos.length
+      ? randomChoice(posibles_cercanos)
+      : "Sin aeropuerto cercano";
+
+  } else {
+    aeropuerto_inicial = randomChoice(aeropuertos_iniciales_grandes);
+    // Asegurarse que cercano no sea igual al inicial
+    const otros = aeropuertos_iniciales_grandes.filter(a => a !== aeropuerto_inicial);
+    aeropuerto_cercano = otros.length ? randomChoice(otros) : "Sin aeropuerto cercano";
+  }
+
+  document.getElementById("aeropuerto_inicial_label").textContent = `Aeropuerto inicial: ${aeropuerto_inicial}`;
+  document.getElementById("aeropuerto_cercano_label").textContent = `Aeropuerto cercano (secundario): ${aeropuerto_cercano}`;
+}
+
+  </script>
+</body>
+</html>
