@@ -82,51 +82,52 @@
     function randomChoice(array) {
       return array[Math.floor(Math.random() * array.length)];
     }
-function elegirAvionYAeropuertos() {
-  if (!aviones_lista.length) return;
 
-  const avion = randomChoice(aviones_lista);
-  document.getElementById("avion_label").textContent = `Avión: ${avion}`;
+    function elegirAvionYAeropuertos() {
+      if (!aviones_lista.length) return;
 
-  let aeropuerto_inicial, aeropuerto_cercano;
+      const avion = randomChoice(aviones_lista);
+      document.getElementById("avion_label").textContent = `Avión: ${avion}`;
 
-  if (aviones_pequenos.includes(avion)) {
-    // Aeropuerto inicial puede ser pequeño o grande
-    const aeropuertos_disponibles = aeropuertos_iniciales_pequenos.concat(aeropuertos_iniciales_grandes);
-    aeropuerto_inicial = randomChoice(aeropuertos_disponibles);
+      let aeropuerto_inicial, aeropuerto_cercano;
 
-    // Aeropuerto cercano sí se usa, de vecinos
-    const vecinos = aeropuertos_cercanos[aeropuerto_inicial] || [];
-    const opciones_cercanas = vecinos.filter(a => a !== aeropuerto_inicial);
-    aeropuerto_cercano = opciones_cercanas.length
-      ? randomChoice(opciones_cercanas)
-      : "Sin aeropuerto cercano";
+      if (aviones_pequenos.includes(avion)) {
+        // Aeropuerto inicial puede ser pequeño o grande
+        const aeropuertos_disponibles = aeropuertos_iniciales_pequenos.concat(aeropuertos_iniciales_grandes);
+        aeropuerto_inicial = randomChoice(aeropuertos_disponibles);
 
-  } else if (aviones_grandes.includes(avion) || aviones_exclusivos.includes(avion)) {
-    // Aeropuerto inicial solo grandes
-    let disponibles = aeropuertos_iniciales_grandes;
+        // Aeropuerto cercano sí se usa, de vecinos
+        const vecinos = aeropuertos_cercanos[aeropuerto_inicial] || [];
+        const opciones_cercanas = vecinos.filter(a => a !== aeropuerto_inicial);
+        aeropuerto_cercano = opciones_cercanas.length
+          ? randomChoice(opciones_cercanas)
+          : "Sin aeropuerto cercano";
 
-    // Regla Paphos
-    if (aviones_grandes2.includes(avion)) {
-      disponibles = disponibles.filter(a => a !== 'Paphos');
+      } else if (aviones_grandes.includes(avion) || aviones_exclusivos.includes(avion)) {
+        // Aeropuerto inicial solo grandes
+        let disponibles = aeropuertos_iniciales_grandes;
+
+        // Regla Paphos
+        if (aviones_grandes2.includes(avion)) {
+          disponibles = disponibles.filter(a => a !== 'Paphos');
+        }
+
+        aeropuerto_inicial = randomChoice(disponibles);
+
+        // Aeropuerto cercano: otro aeropuerto grande distinto al inicial
+        const secundarios_posibles = disponibles.filter(a => a !== aeropuerto_inicial);
+        aeropuerto_cercano = secundarios_posibles.length
+          ? randomChoice(secundarios_posibles)
+          : aeropuerto_inicial; // Si no hay otro, repetimos el inicial (muy raro)
+      } else {
+        // Caso general, solo grandes
+        aeropuerto_inicial = randomChoice(aeropuertos_iniciales_grandes);
+        aeropuerto_cercano = "No aplica";
+      }
+
+      document.getElementById("aeropuerto_inicial_label").textContent = `Aeropuerto inicial: ${aeropuerto_inicial}`;
+      document.getElementById("aeropuerto_cercano_label").textContent = `Aeropuerto cercano (secundario): ${aeropuerto_cercano}`;
     }
-    // Si no está en grandes2, puede elegir Paphos, no filtramos nada
-
-    aeropuerto_inicial = randomChoice(disponibles);
-
-    // No se usa aeropuerto cercano para estos aviones
-    aeropuerto_cercano = "No aplica";
-
-  } else {
-    // Caso general, solo grandes
-    aeropuerto_inicial = randomChoice(aeropuertos_iniciales_grandes);
-    aeropuerto_cercano = "No aplica";
-  }
-
-  document.getElementById("aeropuerto_inicial_label").textContent = `Aeropuerto inicial: ${aeropuerto_inicial}`;
-  document.getElementById("aeropuerto_cercano_label").textContent = `Aeropuerto cercano (secundario): ${aeropuerto_cercano}`;
-}
-
   </script>
 </body>
 </html>
