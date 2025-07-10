@@ -1,44 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Selector Aleatorio de Aviones y Aeropuertos</title>
-<style>
-  body {
-    background-color: #7D8F97;
-    color: #0A1E2F; /* Azul oscuro */
-    font-family: 'Planer', sans-serif;
-    text-align: center;
-    padding: 20px;
-    font-size: 1.5em; /* Aumenta tamaño 1.5x */
-  }
-  button {
-    background-color: #1E4963;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 1.5em;
-    cursor: pointer;
-    margin-top: 22px;
-  }
-  .label {
-    font-size: 1.5em;
-    margin: 18px 0;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selector Aleatorio de Aviones y Aeropuertos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Planer', sans-serif;
+      background: linear-gradient(to bottom, #72858E, #9A9C9E);
+      color: #0A1E2F; /* Azul oscuro */
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .contenedor {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 90%;
+      max-width: 600px;
+      padding: 2em;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      font-size: 1.5em;
+    }
+
+    h1 {
+      margin-bottom: 1em;
+    }
+
+    .label {
+      margin: 18px 0;
+    }
+
+    button {
+      background-color: #1E4963;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+      margin-top: 22px;
+      font-family: 'Planer', sans-serif;
+    }
+
+    button:hover {
+      background-color: #16384C;
+    }
+
+    @media (max-width: 480px) {
+      .contenedor {
+        font-size: 1.2em;
+      }
+
+      button {
+        padding: 12px 24px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<h1>Selector Aleatorio de Aviones y Aeropuertos</h1>
+  <div class="contenedor">
+    <h1>Selector Aleatorio de Aviones y Aeropuertos</h1>
+    <div class="label" id="avion">Avión: ?</div>
+    <div class="label" id="aeropuerto-inicial">Aeropuerto inicial: ?</div>
+    <div class="label" id="aeropuerto-cercano">Aeropuerto final: ?</div>
+    <button id="boton-elegir">Elegir Aleatorios</button>
+  </div>
 
-<div class="label" id="avion">Avión: ?</div>
-<div class="label" id="aeropuerto-inicial">Aeropuerto inicial: ?</div>
-<div class="label" id="aeropuerto-cercano">Aeropuerto final: ?</div>
+  <script>
 
-<button id="boton-elegir">Elegir Aleatorios</button>
-
-<script>
   const aviones_lista = [
     'Piper M350', 'Baron G58', 'Metroliner III', 'TBM 900',
     'Cessna 150A', 'Cessna Citation II', 'Boeing 717',
