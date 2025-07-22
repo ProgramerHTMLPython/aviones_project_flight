@@ -84,11 +84,11 @@
     <div class="label" id="avion">Avión: ?</div>
     <div class="label" id="aeropuerto-inicial">Aeropuerto inicial: ?</div>
     <div class="label" id="aeropuerto-cercano">Aeropuerto final: ?</div>
+    <div class="label" id="motor-info" style="display: none;">Motor: ?</div>
     <button id="boton-elegir">Elegir Aleatorios</button>
   </div>
 
   <script>
-
   const aviones_lista = [
     'Piper M350', 'Baron G58', 'Metroliner III', 'TBM 900',
     'Cessna 150A', 'Cessna Citation II', 'Boeing 717',
@@ -99,7 +99,7 @@
   ];
 
   const aeropuertos_iniciales_grandes = [
-    'Southampton', 'Menorca', 'Gran Canaria', 'Gatwick', 'Punta Cana', 'Cibao', 'Larnaca', 'RAF Akritri', 'Paphos'
+    'Southampton', 'Menorca', 'Gran Canaria', 'Gatwick', 'Punta Cana', 'Cibao', 'Larnaca', 'RAF Akrotri', 'Paphos'
   ];
 
   const aeropuertos_iniciales_pequenos = [
@@ -116,18 +116,14 @@
     'Antoine-Simon': ['Cabo Rojo', 'Gran Canaria', 'Punta Cana'],
     'Cibao': ['Punta Cana', 'Gran Canaria', 'Arroyo Barril'],
     'Punta Cana': ['Cibao', 'Gran Canaria', 'Antoine-Simon'],
-    'Larnaca': ['Gatwick', 'Southampton', 'Menorca'],
-    'RAF Akritri': ['Larnaca', 'Paphos'],
-    'Paphos': ['RAF Akritri', 'Larnaca']
+    'Larnaca': ['Gatwick', 'Southampton', 'Menorca','RAF Akrotri', 'Paphos'],
+    'RAF Akrotri': ['Larnaca', 'Paphos'],
+    'Paphos': ['RAF Akrotri', 'Larnaca']
   };
 
-  const aviones_grandes = [
-    'Boeing 777', 'Boeing 787', 'Airbus A350', 'MD-11'
-  ];
+  const aviones_grandes = ['Boeing 777', 'Boeing 787', 'Airbus A350', 'MD-11'];
 
-  const aviones2 = [
-    'Boeing 777', 'Boeing 787', 'Airbus A350', 'Airbus A330', 'MD-11'
-  ];
+  const aviones2 = ['Boeing 777', 'Boeing 787', 'Airbus A350', 'Airbus A330', 'MD-11'];
 
   const aviones_pequenos = [
     'Piper M350', 'Baron G58', 'Metroliner III',
@@ -180,8 +176,19 @@
     document.getElementById('avion').textContent = `Avión: ${avion_elegido}`;
     document.getElementById('aeropuerto-inicial').textContent = `Aeropuerto inicial: ${aeropuerto_inicial}`;
     document.getElementById('aeropuerto-cercano').textContent = `Aeropuerto final: ${aeropuerto_cercano}`;
+
+    // Mostrar motor si es Boeing 757
+    const motorInfo = document.getElementById('motor-info');
+    if (avion_elegido === 'Boeing 757') {
+      const motores_757 = ['RB-211', 'PW2000'];
+      const motor = elegirRandom(motores_757);
+      motorInfo.textContent = `Motor: ${motor}`;
+      motorInfo.style.display = 'block';
+    } else {
+      motorInfo.style.display = 'none';
+    }
   });
-</script>
+  </script>
 
 </body>
 </html>
